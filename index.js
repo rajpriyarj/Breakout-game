@@ -1,18 +1,37 @@
-// SELECT CANVAS ELEMENT
+const dpi = window.devicePixelRatio;
+
 const cvs = document.getElementById("myCanvas");
 const ctx = cvs.getContext("2d");
+
+
+const style = {
+    height() {
+        return +getComputedStyle(cvs).getPropertyValue('height').slice(0, -2);
+    },
+    width() {
+        return +getComputedStyle(cvs).getPropertyValue('width').slice(0, -2);
+    }
+}
+
+cvs.setAttribute('width', style.width() * dpi);
+cvs.setAttribute('height', style.height() * dpi);
+// SELECT CANVAS ELEMENT
+// const cvs = document.getElementById("myCanvas");
+// const ctx = cvs.getContext("2d");
 
 // ADD BORDER TO CANVAS
 cvs.style.border = "1px solid #0ff";
 
-// MAKE LINE THIK WHEN DRAWING TO CANVAS
+// MAKE LINE THICK WHEN DRAWING TO CANVAS
 ctx.lineWidth = 3;
 
 // GAME VARIABLES AND CONSTANTS
-const PADDLE_WIDTH = 100;
-const PADDLE_MARGIN_BOTTOM = 50;
-const PADDLE_HEIGHT = 20;
-const BALL_RADIUS = 8;
+const PADDLE_WIDTH = cvs.width / 10;
+const PADDLE_MARGIN_BOTTOM = cvs.height /10;
+const PADDLE_HEIGHT = cvs.height /25;
+const BALL_RADIUS = cvs.height / 50;
+const BRICK_WIDTH = cvs.width / 10;
+const BRICK_HEIGHT = cvs.height / 15;
 let LIFE = 3; // PLAYER HAS 3 LIVES
 let SCORE = 0;
 const SCORE_UNIT = 10;
@@ -28,7 +47,7 @@ const paddle = {
     y : cvs.height - PADDLE_MARGIN_BOTTOM - PADDLE_HEIGHT,
     width : PADDLE_WIDTH,
     height : PADDLE_HEIGHT,
-    dx :5
+    dx : 10
 }
 
 // DRAW PADDLE
@@ -42,6 +61,7 @@ function drawPaddle(){
 
 // CONTROL THE PADDLE
 document.addEventListener("keydown", function(event){
+    // console.log(event)
     if(event.keyCode == 37){
         leftArrow = true;
     }else if(event.keyCode == 39){
@@ -49,20 +69,23 @@ document.addEventListener("keydown", function(event){
     }
 });
 document.addEventListener("keyup", function(event){
+    // console.log(event)
     if(event.keyCode == 37){
         leftArrow = false;
     }else if(event.keyCode == 39){
         rightArrow = false;
     }
 });
+
 document.addEventListener("mousemove", movePaddle, false);
 
 // MOVE PADDLE
 function movePaddle(){
-    // var relativeX = e.clientX - cvs.offSetLeft;
+    // console.log(e)
+    // let relativeX = e.clientX - cvs.offSetLeft;
     // if(relativeX > 0 && relativeX <cvs.width){
-    //     paddle.x = relativeX - paddle.width/2;
-    // }
+    //     paddle.x = relativeX - paddle.width/2;}
+    // // }
     if(rightArrow && paddle.x + paddle.width < cvs.width){
         paddle.x += paddle.dx;
     }else if(leftArrow && paddle.x > 0){
@@ -76,8 +99,8 @@ const ball = {
     y : paddle.y - BALL_RADIUS,
     radius : BALL_RADIUS,
     speed : 4,
-    dx : 3 * (Math.random() * 2 - 1),
-    dy : -3
+    dx : 6 * (Math.random() * 2 - 1),
+    dy : -6
 }
 
 // DRAW THE BALL
@@ -123,8 +146,8 @@ function ballWallCollision(){
 function resetBall(){
     ball.x = cvs.width/2;
     ball.y = paddle.y - BALL_RADIUS;
-    ball.dx = 3 * (Math.random() * 2 - 1);
-    ball.dy = -3;
+    ball.dx = 10 * (Math.random() * 2 - 1);
+    ball.dy = -10;
 }
 
 // BALL AND PADDLE COLLISION
@@ -151,12 +174,12 @@ function ballPaddleCollision(){
 
 // CREATE THE BRICKS
 const brick = {
-    row : 1,
-    column : 5,
-    width : 55,
-    height : 20,
-    offSetLeft : 20,
-    offSetTop : 20,
+    row : 2,
+    column : Math.floor(cvs.width / (PADDLE_WIDTH + cvs.width / 84)),
+    width : BRICK_WIDTH,
+    height : BRICK_HEIGHT,
+    offSetLeft : cvs.width / 40,
+    offSetTop : cvs.height /8,
     marginTop : 40,
     fillColor : "#2e3548",
     strokeColor : "#FFF"
@@ -296,8 +319,8 @@ function update(){
 // GAME LOOP
 function loop(){
     // CLEAR THE CANVAS
-    ctx.drawImage(BG_IMG, 0, 0);
-
+    // ctx.drawImage(BG_IMG, 0, 0);
+    ctx.clearRect(0, 0, cvs.width, cvs.height);
     draw();
 
     update();

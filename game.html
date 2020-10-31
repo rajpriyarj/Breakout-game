@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Breakout Game</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            background-color: black;
+            font-family: 'Press Start 2P', cursive;
+            color: #eeeeee;
+        }
+        #canvasdiv{
+            width: 90vw;
+            height: 80vh;
+        }
+
+        #myCanvas{
+            background-image: url("assets/img/3.jpg");
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: 100% 100%;
+            width: 100%;
+            height: 100%;
+
+        }
+        #sound{
+            width: 30px;
+            height : 30px;
+            cursor: pointer;
+            position: absolute;
+            /*top : 465px;*/
+            /*left : 15px;*/
+        }
+        #gameover{
+            position: absolute;
+            width : 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        #youwon{
+            width: 300px;
+            position: relative;
+            display: none;
+
+            top: 200px;
+            /*left: 150px;*/
+        }
+        #youlose{
+            width: 400px;
+            position: relative;
+            top: 100px;
+            /*left: 570px;*/
+            display: none;
+        }
+        #restart{
+            background: none;
+            position: relative;
+            /*top: 10px;*/
+            /*left: 675px;*/
+            cursor: pointer;
+            font-size: 1.25em;
+            color : #FFF;
+        }
+    </style>
+</head>
+<body>
+<center>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                    <h1>
+                        Hi,
+                        <span id="data">
+                            <script>
+                                document.getElementById("data").innerHTML=localStorage.getItem("txtVal");
+                            </script>
+                        </span>
+                    </h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <p style="font-size: 48px; padding-top: 20px; color: #eeeeee">2d Breakout Game !</p>
+                <p style="font-size: 15px; padding-top: 20px; color: #eeeeee">Use Arrow Keys or Mouse to play.</p>
+                <div class="sound">
+                    <img src="assets/img/SOUND_ON.png" alt="" id="sound">
+                </div>
+                <br><br>
+            </div>
+        </div>
+
+<!--            <div id="gameover">-->
+<!--                <img src="assets/img/youwon.png" alt="" id="youwon">-->
+<!--                <img src="assets/img/gameover.jpg" alt="" id="youlose">-->
+<!--                <div id="restart">Play Again!</div>-->
+<!--            </div>-->
+<!--            <canvas id="myCanvas" height="400" width="1000"></canvas>-->
+            <div id="gameover">
+                <img src="assets/img/youwon.png" alt="" id="youwon">
+                <img src="assets/img/gameover.jpg" alt="" id="youlose">
+                <div id="restart">Play Again!</div>
+            </div>
+
+            <div id="canvasdiv">
+                <canvas id="myCanvas"></canvas>
+            </div>
+            <br>
+
+
+        <div class="row text-center">
+            <button type="button" class="btn btn-lg btn-primary" id="start" autofocus>Start / Resume</button>
+            <button type="button" class="btn btn-lg btn-danger hidden" id="pause">Pause</button>
+        </div>
+    </div>
+</center>
+        <script src="components.js" type="text/javascript"></script>
+        <script src="index.js" type="text/javascript"></script>
+        <script src="jquery.min.js" type="text/javascript"></script>
+</body>
+</html>
