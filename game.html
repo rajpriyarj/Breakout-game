@@ -72,57 +72,51 @@
     </style>
 </head>
 <body>
-<center>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-lg-12">
-                    <h1>
-                        Hi,
-                        <span id="data">
-                            <script>
-                                document.getElementById("data").innerHTML=localStorage.getItem("txtVal");
-                            </script>
-                        </span>
-                    </h1>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-12">
-                <p style="font-size: 48px; padding-top: 20px; color: #eeeeee">2d Breakout Game !</p>
-                <p style="font-size: 15px; padding-top: 20px; color: #eeeeee">Use Arrow Keys or Mouse to play.</p>
-                <div class="sound">
-                    <img src="assets/img/SOUND_ON.png" alt="" id="sound">
+    <center>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                        <h1>
+                            Hi,
+                            <span id="data">
+                                <script>
+                                    document.getElementById("data").innerHTML=localStorage.getItem("txtVal");
+                                </script>
+                            </span>
+                        </h1>
                 </div>
-                <br><br>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <p style="font-size: 48px; padding-top: 20px; color: #eeeeee">2d Breakout Game !</p>
+                    <p style="font-size: 15px; padding-top: 20px; color: #eeeeee">Use Arrow Keys or Mouse to play.</p>
+                    <div class="sound">
+                        <img src="assets/img/SOUND_ON.png" alt="" id="sound">
+                    </div>
+                    <br><br>
+                </div>
+            </div>
+            <div class="row">
+                <div id="gameover">
+
+                    <img src="assets/img/youwon.png" alt="" id="youwon">
+                    <img src="assets/img/gameover.jpg" alt="" id="youlose">
+                    <div id="restart"><br><br>Play Again!</div>
+                </div>
+                <div id="canvasdiv">
+                    <canvas id="myCanvas"></canvas>
+                </div>
+                <br>
+            </div>
+
+            <div class="row text-center">
+                <button type="button" class="btn btn-lg btn-primary" id="start" autofocus>Start / Resume</button>
+                <button type="button" class="btn btn-lg btn-danger hidden" id="pause">Pause</button>
             </div>
         </div>
-
-<!--            <div id="gameover">-->
-<!--                <img src="assets/img/youwon.png" alt="" id="youwon">-->
-<!--                <img src="assets/img/gameover.jpg" alt="" id="youlose">-->
-<!--                <div id="restart">Play Again!</div>-->
-<!--            </div>-->
-<!--            <canvas id="myCanvas" height="400" width="1000"></canvas>-->
-            <div id="gameover">
-                <img src="assets/img/youwon.png" alt="" id="youwon">
-                <img src="assets/img/gameover.jpg" alt="" id="youlose">
-                <div id="restart">Play Again!</div>
-            </div>
-
-            <div id="canvasdiv">
-                <canvas id="myCanvas"></canvas>
-            </div>
-            <br>
-
-
-        <div class="row text-center">
-            <button type="button" class="btn btn-lg btn-primary" id="start" autofocus>Start / Resume</button>
-            <button type="button" class="btn btn-lg btn-danger hidden" id="pause">Pause</button>
-        </div>
-    </div>
-</center>
-        <script src="components.js" type="text/javascript"></script>
-        <script src="index.js" type="text/javascript"></script>
-        <script src="jquery.min.js" type="text/javascript"></script>
+    </center>
+    <script src="components.js" type="text/javascript"></script>
+    <script src="index.js" type="text/javascript"></script>
+    <script src="jquery.min.js" type="text/javascript"></script>
 </body>
 </html>

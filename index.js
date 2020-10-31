@@ -98,9 +98,9 @@ const ball = {
     x : cvs.width/2,
     y : paddle.y - BALL_RADIUS,
     radius : BALL_RADIUS,
-    speed : 4,
-    dx : 6 * (Math.random() * 2 - 1),
-    dy : -6
+    speed : 7,
+    dx : 7 * (Math.random() * 2 - 1),
+    dy : -7
 }
 
 // DRAW THE BALL
@@ -146,8 +146,8 @@ function ballWallCollision(){
 function resetBall(){
     ball.x = cvs.width/2;
     ball.y = paddle.y - BALL_RADIUS;
-    ball.dx = 10 * (Math.random() * 2 - 1);
-    ball.dy = -10;
+    ball.dx = 7 * (Math.random() * 2 - 1);
+    ball.dy = -7;
 }
 
 // BALL AND PADDLE COLLISION
@@ -174,13 +174,13 @@ function ballPaddleCollision(){
 
 // CREATE THE BRICKS
 const brick = {
-    row : 2,
-    column : Math.floor(cvs.width / (PADDLE_WIDTH + cvs.width / 84)),
+    row : 1,
+    column : Math.floor(cvs.width / (PADDLE_WIDTH + cvs.width / 50)),
     width : BRICK_WIDTH,
     height : BRICK_HEIGHT,
     offSetLeft : cvs.width / 40,
     offSetTop : cvs.height /8,
-    marginTop : 40,
+    marginTop : 30,
     fillColor : "#2e3548",
     strokeColor : "#FFF"
 }
@@ -355,7 +355,7 @@ function audioManager(){
 // SHOW GAME OVER MESSAGE
 /* SELECT ELEMENTS */
 const gameover = document.getElementById("gameover");
-const youwin = document.getElementById("youwin");
+const youwon = document.getElementById("youwon");
 const youlose = document.getElementById("youlose");
 const restart = document.getElementById("restart");
 
