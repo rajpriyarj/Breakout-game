@@ -178,7 +178,7 @@ const brick = {
     column : Math.floor(cvs.width / (PADDLE_WIDTH + cvs.width / 50)),
     width : BRICK_WIDTH,
     height : BRICK_HEIGHT,
-    offSetLeft : cvs.width / 40,
+    offSetLeft : cvs.width / 45,
     offSetTop : cvs.height /8,
     marginTop : 30,
     fillColor : "#2e3548",
