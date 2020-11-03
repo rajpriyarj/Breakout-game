@@ -1,30 +1,3 @@
-const dpi = window.devicePixelRatio;
-const cvs = document.getElementById("myCanvas");
-const ctx = cvs.getContext("2d");
-const style = {
-    height() {
-        return +getComputedStyle(cvs).getPropertyValue('height').slice(0, -2);
-    },
-    width() {
-        return +getComputedStyle(cvs).getPropertyValue('width').slice(0, -2);
-    }
-}
-
-cvs.setAttribute('width', style.width() * dpi);
-cvs.setAttribute('height', style.height() * dpi);
-cvs.style.border = "1px solid #0ff";
-
-// MAKE LINE THICK WHEN DRAWING TO CANVAS
-ctx.lineWidth = 3;
-
-// GAME VARIABLES AND CONSTANTS
-const PADDLE_WIDTH = cvs.width / 10;
-const PADDLE_MARGIN_BOTTOM = cvs.height /10;
-const PADDLE_HEIGHT = cvs.height /25;
-const BALL_RADIUS = cvs.height / 50;
-const BRICK_WIDTH = cvs.width / 10;
-const BRICK_HEIGHT = cvs.height / 15;
-
 /////// LOAD IMAGES ////////
 
 const LEVEL_IMG = new Image();
@@ -51,6 +24,33 @@ WIN.src = "assets/sounds/win.mp3";
 
 const BRICK_HIT = new Audio();
 BRICK_HIT.src = "assets/sounds/brick_hit.mp3";
+
+const dpi = window.devicePixelRatio;
+const cvs = document.getElementById("myCanvas");
+const ctx = cvs.getContext("2d");
+const style = {
+    height() {
+        return +getComputedStyle(cvs).getPropertyValue('height').slice(0, -2);
+    },
+    width() {
+        return +getComputedStyle(cvs).getPropertyValue('width').slice(0, -2);
+    }
+}
+
+cvs.setAttribute('width', style.width() * dpi);
+cvs.setAttribute('height', style.height() * dpi);
+cvs.style.border = "1px solid #0ff";
+
+// MAKE LINE THICK WHEN DRAWING TO CANVAS
+ctx.lineWidth = 3;
+
+// GAME VARIABLES AND CONSTANTS
+const PADDLE_WIDTH = cvs.width / 10;
+const PADDLE_MARGIN_BOTTOM = cvs.height /10;
+const PADDLE_HEIGHT = cvs.height /25;
+const BALL_RADIUS = cvs.height / 50;
+const BRICK_WIDTH = cvs.width / 10;
+const BRICK_HEIGHT = cvs.height / 15;
 
 // PLAYER
 let LIFE = 3;
@@ -94,7 +94,9 @@ function drawPaddle(){
 // 32 for spacebar key
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
-document.addEventListener("mousemove", movePaddle, false);
+document.addEventListener("touchstart", touchHandler);
+document.addEventListener("touchmove", touchHandler);
+document.addEventListener("mousemove", mouseMoveHandler, false);
 // document.addEventListener("keydown", function(event){
 //     if(event.keyCode == 37){
 //         leftArrow = true;
@@ -129,6 +131,26 @@ function keyUpHandler(event){
 }
 
 // MOVE PADDLE
+function mouseMoveHandler(e){
+    let relativeX = e.clientX - cvs.offsetLeft;
+    if (relativeX > 0 && relativeX < cvs.width) {
+        paddle.x = relativeX - paddle.width;
+    }
+    if (paddle.x < 0) {
+        paddle.x = 0;
+    }
+    if ((paddle.x + paddle.width) > cvs.width) {
+        paddle.x = cvs.width - paddle.width;
+    }
+}
+
+function touchHandler(e) {
+    if(e.touches) {
+        paddle.x = e.touches[0].clientX - cvs.offsetLeft - paddle.width / 2;
+        e.preventDefault();
+    }
+}
+
 function movePaddle(){
     if(rightArrow && paddle.x + paddle.width < cvs.width){
         paddle.x += paddle.dx;
@@ -321,19 +343,6 @@ function showGameStats(text, textX, textY, img, imgX, imgY){
     ctx.drawImage(img, imgX, imgY, width = 25, height = 25);
 }
 
-// DRAW FUNCTION
-// function draw(){
-//     drawPaddle();
-//     drawBall();
-//     drawBricks();
-//     // SHOW SCORE
-//     showGameStats(SCORE, 35, 25, SCORE_IMG, 5, 5);
-//     // SHOW LIVES
-//     showGameStats(LIFE, cvs.width - 25, 25, LIFE_IMG, cvs.width-55, 5);
-//     // SHOW LEVEL
-//     showGameStats(LEVEL, cvs.width/2, 25, LEVEL_IMG, cvs.width/2 - 30, 5);
-// }
-
 // game over
 function gameOver(){
     if(LIFE <= 0){
@@ -405,9 +414,7 @@ function loop(){
     // SHOW LEVEL
     showGameStats(LEVEL, cvs.width/2, 25, LEVEL_IMG, cvs.width/2 - 30, 5);
     gameOver();
-
     levelUp();
-    // update();
 
     if(! GAME_OVER){
         if (flag == 1){
