@@ -1,9 +1,6 @@
 const dpi = window.devicePixelRatio;
-
 const cvs = document.getElementById("myCanvas");
 const ctx = cvs.getContext("2d");
-
-
 const style = {
     height() {
         return +getComputedStyle(cvs).getPropertyValue('height').slice(0, -2);
@@ -15,11 +12,6 @@ const style = {
 
 cvs.setAttribute('width', style.width() * dpi);
 cvs.setAttribute('height', style.height() * dpi);
-// SELECT CANVAS ELEMENT
-// const cvs = document.getElementById("myCanvas");
-// const ctx = cvs.getContext("2d");
-
-// ADD BORDER TO CANVAS
 cvs.style.border = "1px solid #0ff";
 
 // MAKE LINE THICK WHEN DRAWING TO CANVAS
@@ -32,14 +24,51 @@ const PADDLE_HEIGHT = cvs.height /25;
 const BALL_RADIUS = cvs.height / 50;
 const BRICK_WIDTH = cvs.width / 10;
 const BRICK_HEIGHT = cvs.height / 15;
-let LIFE = 3; // PLAYER HAS 3 LIVES
+
+/////// LOAD IMAGES ////////
+
+const LEVEL_IMG = new Image();
+LEVEL_IMG.src = "assets/img/level.png";
+
+const LIFE_IMG = new Image();
+LIFE_IMG.src = "assets/img/life.png";
+
+const SCORE_IMG = new Image();
+SCORE_IMG.src = "assets/img/score.png";
+
+/////// LOAD SOUNDS ////////
+const WALL_HIT = new Audio();
+WALL_HIT.src = "assets/sounds/wall.mp3";
+
+const LIFE_LOST = new Audio();
+LIFE_LOST.src = "assets/sounds/life_lost.mp3";
+
+const PADDLE_HIT = new Audio();
+PADDLE_HIT.src = "assets/sounds/paddle_hit.mp3";
+
+const WIN = new Audio();
+WIN.src = "assets/sounds/win.mp3";
+
+const BRICK_HIT = new Audio();
+BRICK_HIT.src = "assets/sounds/brick_hit.mp3";
+
+// PLAYER
+let LIFE = 3;
 let SCORE = 0;
 const SCORE_UNIT = 10;
 let LEVEL = 1;
 const MAX_LEVEL = 3;
+
 let GAME_OVER = false;
 let leftArrow = false;
 let rightArrow = false;
+
+let flag = 0;
+let strt = document.getElementById('start');
+let pau = document.getElementById('pause');
+
+strt.addEventListener("click", game_start_action, false);
+pau.addEventListener("click", game_pause_action, false);
 
 // CREATE THE PADDLE
 const paddle = {
@@ -60,37 +89,79 @@ function drawPaddle(){
 }
 
 // CONTROL THE PADDLE
-document.addEventListener("keydown", function(event){
-    // console.log(event)
+// 37 for left key
+// 39 for right key
+// 32 for spacebar key
+document.addEventListener("keydown", keyDownHandler, false);
+document.addEventListener("keyup", keyUpHandler, false);
+document.addEventListener("mousemove", movePaddle, false);
+// document.addEventListener("keydown", function(event){
+//     if(event.keyCode == 37){
+//         leftArrow = true;
+//     }else if(event.keyCode == 39){
+//         rightArrow = true;
+//     }
+// });
+// document.addEventListener("keyup", function(event){
+//     if(event.keyCode == 37){
+//         leftArrow = false;
+//     }else if(event.keyCode == 39){
+//         rightArrow = false;
+//     }
+// });
+
+function keyDownHandler(event){
     if(event.keyCode == 37){
         leftArrow = true;
     }else if(event.keyCode == 39){
         rightArrow = true;
+    }else if(event.keyCode == 32){
+        spacebar_action();
     }
-});
-document.addEventListener("keyup", function(event){
-    // console.log(event)
+}
+
+function keyUpHandler(event){
     if(event.keyCode == 37){
         leftArrow = false;
     }else if(event.keyCode == 39){
         rightArrow = false;
     }
-});
-
-document.addEventListener("mousemove", movePaddle, false);
+}
 
 // MOVE PADDLE
 function movePaddle(){
-    // console.log(e)
-    // let relativeX = e.clientX - cvs.offSetLeft;
-    // if(relativeX > 0 && relativeX <cvs.width){
-    //     paddle.x = relativeX - paddle.width/2;}
-    // // }
     if(rightArrow && paddle.x + paddle.width < cvs.width){
         paddle.x += paddle.dx;
     }else if(leftArrow && paddle.x > 0){
         paddle.x -= paddle.dx;
     }
+}
+
+function spacebar_action(){
+    if(flag == 0){
+        game_start_action();
+    } else {
+        game_pause_action();
+    }
+}
+
+
+function game_start_action(){
+    if(flag == 0){
+        flag = 1;
+        loop();
+    }
+
+    $("#start").addClass('hidden');
+    $("#pause").removeClass('hidden');
+}
+
+
+function game_pause_action(){
+    flag = 0;
+
+    $("#pause").addClass('hidden');
+    $('#start').removeClass('hidden');
 }
 
 // CREATE THE BALL
@@ -137,6 +208,7 @@ function ballWallCollision(){
 
     if(ball.y + ball.radius > cvs.height){
         LIFE--; // LOSE LIFE
+        flag = 0;
         LIFE_LOST.play();
         resetBall();
     }
@@ -144,6 +216,7 @@ function ballWallCollision(){
 
 // RESET THE BALL
 function resetBall(){
+    flag = 1;
     ball.x = cvs.width/2;
     ball.y = paddle.y - BALL_RADIUS;
     ball.dx = 7 * (Math.random() * 2 - 1);
@@ -249,20 +322,17 @@ function showGameStats(text, textX, textY, img, imgX, imgY){
 }
 
 // DRAW FUNCTION
-function draw(){
-    drawPaddle();
-
-    drawBall();
-
-    drawBricks();
-
-    // SHOW SCORE
-    showGameStats(SCORE, 35, 25, SCORE_IMG, 5, 5);
-    // SHOW LIVES
-    showGameStats(LIFE, cvs.width - 25, 25, LIFE_IMG, cvs.width-55, 5);
-    // SHOW LEVEL
-    showGameStats(LEVEL, cvs.width/2, 25, LEVEL_IMG, cvs.width/2 - 30, 5);
-}
+// function draw(){
+//     drawPaddle();
+//     drawBall();
+//     drawBricks();
+//     // SHOW SCORE
+//     showGameStats(SCORE, 35, 25, SCORE_IMG, 5, 5);
+//     // SHOW LIVES
+//     showGameStats(LIFE, cvs.width - 25, 25, LIFE_IMG, cvs.width-55, 5);
+//     // SHOW LEVEL
+//     showGameStats(LEVEL, cvs.width/2, 25, LEVEL_IMG, cvs.width/2 - 30, 5);
+// }
 
 // game over
 function gameOver(){
@@ -300,33 +370,49 @@ function levelUp(){
 }
 
 // UPDATE GAME FUNCTION
-function update(){
-    movePaddle();
-
-    moveBall();
-
-    ballWallCollision();
-
-    ballPaddleCollision();
-
-    ballBrickCollision();
-
-    gameOver();
-
-    levelUp();
-}
+// function update(){
+//     movePaddle();
+//
+//     moveBall();
+//
+//     ballWallCollision();
+//
+//     ballPaddleCollision();
+//
+//     ballBrickCollision();
+//     flag = 0;
+//     gameOver();
+//
+//     levelUp();
+// }
 
 // GAME LOOP
 function loop(){
     // CLEAR THE CANVAS
-    // ctx.drawImage(BG_IMG, 0, 0);
     ctx.clearRect(0, 0, cvs.width, cvs.height);
-    draw();
+    drawBall();
+    drawPaddle();
+    drawBricks();
+    movePaddle();
+    moveBall();
+    ballWallCollision();
+    ballPaddleCollision();
+    ballBrickCollision();
+    // SHOW SCORE
+    showGameStats(SCORE, 35, 25, SCORE_IMG, 5, 5);
+    // SHOW LIVES
+    showGameStats(LIFE, cvs.width - 25, 25, LIFE_IMG, cvs.width-55, 5);
+    // SHOW LEVEL
+    showGameStats(LEVEL, cvs.width/2, 25, LEVEL_IMG, cvs.width/2 - 30, 5);
+    gameOver();
 
-    update();
+    levelUp();
+    // update();
 
     if(! GAME_OVER){
-        requestAnimationFrame(loop);
+        if (flag == 1){
+            requestAnimationFrame(loop);
+        }
     }
 }
 loop();
@@ -340,7 +426,7 @@ soundElement.addEventListener("click", audioManager);
 function audioManager(){
     // CHANGE IMAGE SOUND_ON/OFF
     let imgSrc = soundElement.getAttribute("src");
-    let SOUND_IMG = imgSrc == "img/SOUND_ON.png" ? "img/SOUND_OFF.png" : "img/SOUND_ON.png";
+    let SOUND_IMG = imgSrc == "assets/img/SOUND_ON.png" ? "assets/img/SOUND_OFF.png" : "assets/img/SOUND_ON.png";
 
     soundElement.setAttribute("src", SOUND_IMG);
 
