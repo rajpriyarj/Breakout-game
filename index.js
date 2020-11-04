@@ -97,20 +97,6 @@ document.addEventListener("keyup", keyUpHandler, false);
 document.addEventListener("touchstart", touchHandler);
 document.addEventListener("touchmove", touchHandler);
 document.addEventListener("mousemove", mouseMoveHandler, false);
-// document.addEventListener("keydown", function(event){
-//     if(event.keyCode == 37){
-//         leftArrow = true;
-//     }else if(event.keyCode == 39){
-//         rightArrow = true;
-//     }
-// });
-// document.addEventListener("keyup", function(event){
-//     if(event.keyCode == 37){
-//         leftArrow = false;
-//     }else if(event.keyCode == 39){
-//         rightArrow = false;
-//     }
-// });
 
 function keyDownHandler(event){
     if(event.keyCode == 37){
