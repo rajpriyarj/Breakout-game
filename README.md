@@ -16,5 +16,5 @@ This game is made with reference from [2D breakout game using pure JavaScript](h
 
 ###### To run this project on your local just follow the below simple steps:
 
-- [x] Download or Clone the repo.
+- [x] Download or Clone the [repo](https://github.com/rajpriyarj/Breakout-game.git). 
 - [x] Run the index.html file and you are good to go!
